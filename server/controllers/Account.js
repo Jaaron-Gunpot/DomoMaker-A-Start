@@ -1,26 +1,68 @@
 const models = require('../models');
-const Account = models.Account;
+
+const { Account } = models;
 
 const loginPage = (req, res) => {
-    res.render('login');
+  res.render('login');
 };
 
 const signupPage = (req, res) => {
-    res.render('signup');
+  res.render('signup');
 };
 
 const logout = (req, res) => {
-    res.redirect('/');
+  res.redirect('/');
 };
 
-const login = (request, response) => {};
+const login = (req, res) => {
+  const username = `${req.body.username}`;
+  const pass = `${req.body.pass}`;
 
-const signup = (request, response) => {};
+  if (!username || !pass) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  return Account.AccountModel.authenticate(username, pass, (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'Wrong username or password!' });
+    }
+
+    return res.json({ redirect: '/maker' });
+  });
+};
+
+const signup = async (req, res) => {
+  const username = `${req.body.username}`;
+  const pass = `${req.body.pass}`;
+  const pass2 = `${req.body.pass2}`;
+
+  if (!username || !pass || !pass2) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  if (pass !== pass2) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
+
+  try {
+    const hash = await Account.generateHash(pass);
+    const newAccount = new Account({ username, pass: hash });
+    await newAccount.save();
+    return res.json({ redirect: '/maker' });
+  } catch (err) {
+    console.log(err);
+    // 11000 is the code for duplicate error
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Username already in use' });
+    }
+    return res.status(500).json({ error: 'An error occurred' });
+  }
+};
 
 module.exports = {
-    loginPage,
-    signupPage,
-    logout,
-    login,
-    signup
+  loginPage,
+  signupPage,
+  logout,
+  login,
+  signup,
 };
