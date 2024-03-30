@@ -10,7 +10,7 @@ const helmet = require('helmet');
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1/DomoMaker';
 
 mongoose.connect(dbURL).catch((err) => {
   if (err) {
@@ -27,7 +27,7 @@ app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.engine('handlebars', expressHandlebars.engine({ defaultLayout: ' ' }));
+app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 
