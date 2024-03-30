@@ -22,7 +22,7 @@ const login = (req, res) => {
     return res.status(400).json({ error: 'All fields are required!' });
   }
 
-  return Account.AccountModel.authenticate(username, pass, (err, account) => {
+  return Account.authenticate(username, pass, (err, account) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Wrong username or password!' });
     }
