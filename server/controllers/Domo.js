@@ -25,7 +25,7 @@ const makeDomo = async (req, res) => {
   };
 
   try {
-    const newDomo = new Domo.DomoModel(domoData);
+    const newDomo = new Domo(domoData);
     await newDomo.save();
     return res.json({ redirect: '/maker' });
   } catch (err) {
