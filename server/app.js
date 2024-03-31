@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
   key: 'sessionid',
-  secret:'Domo Arigato',
+  secret: 'Domo Arigato',
   resave: false,
   saveUninitialized: false,
 }));
