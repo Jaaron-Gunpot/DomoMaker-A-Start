@@ -40,8 +40,8 @@ redisClient.connect().then(() => {
   app.use(bodyParser.json());
   app.use(session({
     key: 'sessionid',
-    store: new RedisStore({ 
-      client: redisClient 
+    store: new RedisStore({
+      client: redisClient,
     }),
     secret: 'Domo Arigato',
     resave: false,
